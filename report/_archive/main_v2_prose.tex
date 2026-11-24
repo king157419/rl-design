@@ -1,0 +1,402 @@
+% 《博弈论与强化学习》算法实战报告 —— 按课程模板（课程设计报告模板（算法实战）.docx）排版
+% 编译：XeLaTeX（Overleaf：Menu → Compiler 选 XeLaTeX）
+\documentclass[a4paper,zihao=5,fontset=fandol,UTF8]{ctexart}
+
+% ---------- 版面：与模板一致 ----------
+% A4；左右 3.175 cm，上下 2.54 cm；页眉一条横线
+\usepackage[a4paper,left=3.175cm,right=3.175cm,top=2.54cm,bottom=2.54cm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+% 模板西文是 Times New Roman，这里用同款字形的 TeX Gyre Termes（TeX Live 自带）
+\setmainfont{texgyretermes}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
+\setsansfont{texgyreheros}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\cfoot{\small\thepage}
+\fancypagestyle{cover}{\fancyhf{}\renewcommand{\headrulewidth}{0.6pt}}
+
+% 正文：宋体五号，1.2 倍行距（Word 的 1.2 倍约等于此处 1.25），段前段后 2.5 pt，首行缩进 2 字
+\linespread{1.25}
+\setlength{\parskip}{2.5pt}
+
+% 标题：一级 15 pt「1.」，二级 14 pt「2.1.」，三级 12 pt「2.1.1.」，均加粗
+\ctexset{
+  section = {format=\fontsize{15pt}{19.5pt}\selectfont\bfseries\heiti\raggedright, name={,.}, number=\arabic{section},
+             aftername=\enspace, beforeskip=12pt, afterskip=6pt},
+  subsection = {format=\fontsize{14pt}{18.2pt}\selectfont\bfseries\heiti\raggedright, name={,.}, aftername=\enspace,
+                beforeskip=8pt, afterskip=4pt, indent=1.5em},
+  subsubsection = {format=\fontsize{12pt}{15.6pt}\selectfont\bfseries\heiti\raggedright, name={,.}, aftername=\enspace,
+                   beforeskip=6pt, afterskip=3pt, indent=3em},
+  figurename = 图, tablename = 表,
+}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs,multirow,array,tabularx}
+\usepackage{amsmath,amssymb,bm}
+\usepackage[font=small,labelsep=quad,justification=justified,singlelinecheck=false]{caption}
+\usepackage{enumitem}
+% 少量保留的列表：编号与正文首行缩进对齐
+\setlist{nosep}
+\setlist[enumerate]{label=（\arabic*）,leftmargin=*,labelindent=2em,labelsep=0.2em}
+\setlist[itemize]{leftmargin=*,labelindent=2em,labelsep=0.5em}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+% 浮动体：多放图、少留白；只放图的页面从顶部排起，不居中
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{4}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{18pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+
+% 图注的第一句话是结论（Nature 图注写法）
+\newcommand{\figlead}[1]{\textbf{#1}}
+
+\begin{document}
+
+% =====================================================================
+% 封面（照模板）
+% =====================================================================
+\thispagestyle{cover}
+\begin{center}
+\vspace*{0.6cm}
+{\fontsize{16pt}{24pt}\selectfont\bfseries\heiti 上海大学\ 2026\ \textasciitilde\ 2027\ 学年\ 秋\ 季学期}\\[14pt]
+{\fontsize{18pt}{27pt}\selectfont\bfseries\heiti \underline{《博弈论与强化学习》}\quad 算法实战报告}
+\end{center}
+\vspace{3.2cm}
+{\fontsize{14pt}{30pt}\selectfont\heiti
+\hspace*{2.6cm}\begin{tabular}{@{}l@{\,}l@{}}
+课程设计题目: & \underline{\makebox[7.4cm][l]{\songti 上大校园猫捉老鼠：躲还是跑？}}\\[6pt]
+姓名: & \underline{\makebox[5.6cm][l]{\songti 刘明洋}}\\[6pt]
+学号: & \underline{\makebox[5.6cm][l]{\songti 24121874}}\\[6pt]
+贡献度（百分比）: & \underline{\makebox[2.6cm][l]{\songti 100\%}}\\
+\end{tabular}}
+
+\vspace{0.9cm}
+{\fontsize{12pt}{16pt}\selectfont\heiti 评分细则:}\par\vspace{4pt}
+\noindent\hspace*{-0.45cm}{\fontsize{12pt}{16pt}\selectfont
+\renewcommand{\arraystretch}{1.6}\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.6cm}|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.1cm}|}
+\hline
+{\heiti 格式规范}\newline（10\%） & {\heiti 选题创新性}\newline（20\%） & {\heiti 算法实现}\newline（30\%） & {\heiti 实验分析}\newline（20\%） & {\heiti 总结思考}\newline（20\%） & {\heiti 总成绩}\newline（100\%）\\
+\hline
+ & & & & & \\[16pt]
+\hline
+\end{tabular}}
+
+\vspace{6pt}
+{\fontsize{12pt}{16pt}\selectfont\heiti 课程报告评语:}
+
+\vfill
+{\fontsize{12pt}{16pt}\selectfont\heiti 任课教师: \underline{\makebox[3cm]{}}\hfill 评阅日期: \underline{\makebox[2.6cm]{}}}
+\vspace{1.5cm}
+\newpage
+
+% =====================================================================
+% 题目、摘要、关键词
+% =====================================================================
+\begin{center}
+{\fontsize{22pt}{30pt}\selectfont\bfseries\heiti 上大校园猫捉老鼠：躲还是跑？}\\[6pt]
+{\fontsize{12pt}{16pt}\selectfont\heiti 真实地图上的多智能体追逃博弈与双方共同强化学习}
+\end{center}
+\vspace{4pt}
+
+\noindent{\heiti\bfseries 摘要：}%
+我们在上大宝山校区 A–G 楼一带玩过一次 30 人的猫捉老鼠，活得最久的人靠的是躲，不是跑。本文用 OpenStreetMap 建出这片区域的真实地图（含灌木丛与空调外机夹缝），把游戏建模为“被抓即转化”的部分可观测随机博弈。脚本策略实验表明：躲进夹缝比跑多活 6.6 分钟，但只要把“藏身处更难被发现”这一条去掉，优势就完全消失；全员都跑时人均存活还会再降 1.5 分钟。让猫和老鼠用 PPO 共同训练后，老鼠自己学会了待在灌木丛里，但换成没见过的对手就失效；把猫的奖励从“个人抓捕”改为“团队平分”，并没有带来更多围捕，反而让多数猫“搭便车”。
+
+\vspace{4pt}
+\noindent{\heiti\bfseries 关键词：}追逃博弈；多智能体强化学习；部分可观测随机博弈；奖励结构；涌现行为
+
+\vspace{8pt}
+
+% =====================================================================
+\section{引言}
+% =====================================================================
+这次课程设计的题目来自一场真实的线下游戏。我们 30 个人晚上在上大宝山校区 A–G 楼一带（含 AJ–GJ 楼）玩猫捉老鼠：开局 10 只猫、20 只老鼠，限时 1 小时，碰一下就算抓到，没有安全区；被抓的老鼠立刻变成猫，所有人都知道谁变了。活动范围只限楼外的平地，不能进教学楼，因为当时楼里还在上课，而且楼里地形复杂，容易受伤。抓得最多的猫和活得最久的老鼠各有奖励。
+
+玩下来有三条直观经验。第一，活得最久的老鼠都是\textbf{躲}出来的：有人躲在灌木丛里，有人躲在空调外机和教学楼外墙之间的夹缝里，后者“躲了超级超级久”。第二，猫有时几只一起围一只老鼠，有时一只追一只，也有一只猫追好几只、结果被分头甩开。第三，晚上有夜跑的路人，老鼠常把他们错认成猫，吓一跳。
+
+这些经验背后是几个博弈问题：躲和跑哪个更好，取决于什么条件？一个只想多活一会儿的老鼠，会不会自己学会躲？“抓得最多的猫有奖”是一个个人奖励，猫之间既要合作围捕，又在争抢功劳，奖励规则会不会改变猫之间的合作方式？据此，本文提出四个研究问题和对应的假设：
+
+\begin{enumerate}
+  \item \textbf{机制（RQ1）}：在真实地图上，“躲比跑活得久”还成立吗？靠的是静止时不显眼、灌木丛，还是夹缝？假设 H1：躲的存活时间长于跑，且夹缝 > 灌木 > 原地不动 > 跑；假设 H2：去掉“静止更难被发现”或“藏身处更难被发现”之后，躲的优势消失；假设 H3：夜跑路人越多，跑的老鼠越吃亏。
+  \item \textbf{老鼠的涌现（RQ2）}：只奖励“活得久”、和猫一起学习的 AI 老鼠，会不会自己学会躲？
+  \item \textbf{最好的藏身点（RQ3）}：A–G 楼一带哪里最好躲，和玩家“夹缝最久”的经验一致吗？
+  \item \textbf{猫的涌现（RQ4）}：围捕不写进规则，猫能不能自己学出来？假设 H4：团队奖励下的猫比个人奖励下的猫更常围捕。
+\end{enumerate}
+
+% =====================================================================
+\section{相关工作}
+% =====================================================================
+\subsection{追逃博弈与搜索博弈}
+追逃问题最早以微分博弈的形式出现。Isaacs 研究了追捕者与逃跑者在连续空间中的最优控制\cite{isaacs1965}；Alpern 与 Gal 的搜索博弈理论则讨论“藏”与“找”的混合策略：藏的一方选择位置，找的一方选择搜索路径\cite{alpern2003}。机器人领域的综述把这两类问题统一为“搜索—追捕”框架，并指出视野受限、障碍遮挡时，问题会从纯追逐变成信息博弈\cite{chung2011}。本文的游戏同时包含两部分：被发现之前是搜索博弈，被发现之后是追逃博弈。
+
+\subsection{多智能体强化学习与涌现行为}
+PPO 是目前最常用的策略梯度方法之一\cite{schulman2017ppo}，配合广义优势估计（GAE）可以稳定地估计长时程回报\cite{schulman2016gae}。Yu 等人发现，在合作型多智能体任务里，参数共享的 PPO 表现出人意料地好\cite{yu2022mappo}。OpenAI 的捉迷藏实验让藏者与找者共同训练，双方先后涌现出堵门、搬箱子、冲浪等六个阶段的策略\cite{baker2020}，说明对抗式共同训练可以自动生成课程。MADDPG 的捕食者—猎物环境是多智能体追逃的经典基准\cite{lowe2017}。
+
+\subsection{奖励结构与合作}
+Leibo 等人用序贯社会困境说明，个体理性与集体利益的冲突会出现在多步决策中\cite{leibo2017}。Grupen 等人在追逃任务中发现，追捕者拿个人奖励时倾向于各自贪心追逐，改用共享奖励后更容易形成包抄\cite{grupen2022}，这正是 RQ4 要在真实地图上检验的。另外，“被抓即转化”的种群动力学和 SIR 传染病模型同构：猫是感染者，老鼠是易感者\cite{kermack1927}。跑的老鼠被抓得快、让猫变多得快，这是一种负外部性，和公地悲剧是同一个结构\cite{hardin1968}。
+
+% =====================================================================
+\section{算法设计}
+% =====================================================================
+\subsection{环境：上大 A–G 楼的真实地图}
+地图来自 OpenStreetMap\cite{osm}。我们用 Overpass 接口下载宝山校区的建筑、道路、林地与行道树，截取 A–GJ 楼外扩 25 m 的区域，共 418 m × 526 m，按 0.5 m 一格栅格化成 836 × 1053 的格子图（图~\ref{fig:env}a）。每个格子属于五类之一：平地（路、广场、草坪，共 15.4 万 m²）可以正常行走；教学楼（4.9 万 m²）不能进入，并且挡住视线；灌木丛（1.5 万 m²）来自 OSM 的林地和行道树，可以进入，但只能以 0.8 m/s 慢慢挪；空调外机夹缝（391 m²）在 OSM 里没有，我们沿 A–GJ 楼外墙按固定随机种子放置 235 台空调外机，平均每 14 m 一台，每台和外墙之间留出 2 m 长、1 m 深的缝；其余是场地外，不能去。
+
+寻路方面，我们在 4 m 的粗格上（11269 个结点）用 Dijkstra 预先算好任意两点之间的下一跳表。智能体每一步先检查到目标的直线是否通畅，通畅就直走，否则查表沿最短路绕楼走。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig0_environment.pdf}
+  \caption{\figlead{环境是上大 A–G 楼一带的真实地图，“藏在哪里、动不动”决定了被发现的快慢。}
+  \textbf{a}，由 OpenStreetMap 栅格化得到的场地（0.5 m 一格）。红点是沿外墙放置的空调外机夹缝；红星是开局集合点。
+  \textbf{b}，一只猫在不同距离上看着老鼠时，老鼠 1 秒内被发现的概率。曲线旁的百分比是 5 m 处的数值。10 m 以内速率不变，之后线性下降，到 20 m 降为 0；1 m 以内必定被发现。}
+  \label{fig:env}
+\end{figure}
+
+\subsection{博弈建模：被抓即转化的部分可观测随机博弈}
+我们把游戏写成一个有 30 名玩家的部分可观测随机博弈（POSG）
+\begin{equation*}
+\mathcal{G}=\langle \mathcal{N}, \mathcal{S}, \{\mathcal{A}_i\}, \{\mathcal{O}_i\}, P, \{r_i\}, \gamma\rangle .
+\end{equation*}
+状态 $s_t$ 包括所有人的位置、速度、体力、身份（猫或老鼠），夜跑路人的位置，以及每只猫对每只老鼠“是否正在盯住”的标记。每个人只能观测到自己的状态和视野内的情况，观测的具体构成见第~\ref{sec:obs} 节。
+
+状态转移中最特别的是身份转移：老鼠 $i$ 与猫 $j$ 的距离小于 0.6 m 即被抓，$i$ 的身份立刻变为猫，同时记 $j$ 抓到一只。因此玩家集合不变，但两个阵营的人数随时间变化，这是本博弈与普通追逃博弈的主要区别。时间步长 $\Delta t=0.5$ s；开局所有人站在集合点 15 m 以内，猫原地数 60 秒，一局在 1 小时（7200 步）后或老鼠全部被抓时结束。运动方面，冲刺 4 m/s、慢跑 2.5 m/s、走 1.5 m/s，灌木丛和夹缝里最快 0.8 m/s；冲刺最多持续 20 s，走路或站着时恢复。碰撞检测把每步分成 4 个子步，撞墙后沿墙滑动。
+
+这是一个一般和博弈。老鼠之间没有直接冲突，但有外部性：任何一只老鼠被抓，都会让所有老鼠面对的猫多一只。猫之间既有合作（围堵同一只老鼠），也在个人奖励下互相竞争。
+
+\subsection{发现模型}
+\label{sec:detect}
+猫 $j$ 能“看到”老鼠 $i$ 的前提是两人之间视线不被楼挡住，且距离 $d<R=20$ m（晚上路灯下的视野）。在这个前提下，每一步以概率 $1-e^{-\lambda\Delta t}$ 发现对方，速率为
+\begin{equation}
+\lambda = \lambda_0 \cdot g(d) \cdot f_{\text{静}}^{\,\mathbb{1}[\text{静止}]} \cdot f_{\text{地形}}, \qquad
+g(d)=\min\!\left(1,\ 2\left(1-\tfrac{d}{R}\right)\right)_{+},
+\end{equation}
+其中 $\lambda_0=4\ \text{s}^{-1}$。速度低于 0.3 m/s 视为静止，$f_{\text{静}}=0.25$；在灌木丛里 $f_{\text{地形}}=0.2$，在夹缝里 $f_{\text{地形}}=0.05$，在平地上为 1。1 m 以内必定发现。一旦被发现，猫会一直盯住目标，直到视线被楼挡住或距离超过 20 m。图~\ref{fig:env}b 给出了各状态下 1 秒内被发现的概率：在 5 m 处，空地上走动是 98\%，夹缝里不动只有 5\%。
+
+这些系数是我们根据游戏体验设定的，不是测量值，因此第~\ref{sec:res-campus} 节会把它们逐一改成 1，看结论是否依赖于它们。老鼠这一侧，6 个夜跑路人在路上慢跑；老鼠在 5 m 以外认不出路人是不是猫，所以远处的路人和猫一样会引发逃跑。
+
+\subsection{脚本策略}
+\label{sec:script}
+脚本策略用来回答 RQ1 和 RQ3，也作为强化学习的对照。猫的策略分三层：看见老鼠，就按对方速度预判 2 s 后的位置并去拦截；跟丢了，就去最后看见的位置附近搜 30 秒；都没有，就巡逻——全队共享一张 20 m × 20 m 的“多久没人搜过”表，每只猫去最久没搜过的格子。
+
+老鼠有五种策略。\textbf{跑}：慢跑游走，一见到猫（或 5 m 外认不出的路人）就冲刺逃离，逃跑方向从 16 个方向里选，既要远离威胁，又要保证前方 1.5 m 和 3 m 都能走。\textbf{躲（灌木或夹缝）}：走到最近的灌木或夹缝藏好不动，猫进入 10 m 才逃，逃完再换一个藏身点，选点时兼顾“离自己近、离威胁远”。\textbf{只躲灌木}和\textbf{只躲夹缝}与之相同，但只选一种藏身点。\textbf{原地不动}：不找掩体，就地站着，猫进入 10 m 才逃。
+
+\subsection{双方共同训练的 PPO}
+\label{sec:obs}
+猫和老鼠各用一张网络，同阵营内所有个体共享参数。老鼠被抓后，下一步起改由猫网络控制。两张网络同时用 PPO\cite{schulman2017ppo} 训练，互为对方的环境。
+
+两张网络的观测相同，共 218 维：自身的位置、速度、剩余体力、已用时间和脚下地形；8 个方向上到最近建筑的距离，以及以自己为中心 14 m × 14 m 的 7 × 7 局部图（灌木、夹缝、建筑三个通道）；最近 5 个“对手”的相对位置和速度——对猫来说是自己或 30 m 内队友正在盯住的老鼠，对老鼠来说是自己看见的猫以及认不出的路人；最近 4 个队友的相对位置；最后一次看见对手的位置和距今的时间。
+
+老鼠有 27 个动作：停下，8 个方向 × 3 档速度，外加“沿路去最近的藏身点”和“冲刺逃离”两个现成动作。猫有 20 个动作：停下，8 个方向 × 2 档速度，外加“沿路追（带预判）”“去最后看见的地方”“巡逻”三个现成动作。我们刻意\textbf{没有}给猫“包抄”动作：如果围捕出现，只能是猫用方向动作和队友配合自己学出来的。
+
+老鼠每活一步得 $\Delta t/60$，即每活 1 分钟得 1 分；被抓后，它作为老鼠的轨迹终止。猫的奖励分两组：\textbf{个人奖励}组自己抓到一只得 1 分，对应真实游戏的“抓得最多的猫有奖”；\textbf{团队奖励}组全队每抓到一只，每只猫平分 1 分。
+
+计算优势时，GAE 需要知道下一步还是不是同一张网络在控制这个人。我们为每个人、每一步记录角色掩码 $m_{t+1}$：老鼠在 $t\to t+1$ 之间被抓，则 $m_{t+1}=0$，这一段对老鼠网络而言就是终止：
+\begin{equation}
+\delta_t = r_t + \gamma\, m_{t+1}\,(1-d_t)\, V(o_{t+1}) - V(o_t),\qquad
+\hat A_t = \delta_t + \gamma\lambda\, m_{t+1}\,(1-d_t)\,\hat A_{t+1}.
+\end{equation}
+目标函数采用剪切形式的 PPO 目标，加上价值损失和熵正则：
+\begin{equation}
+\begin{aligned}
+L(\theta)={}&-\mathbb{E}_t\!\left[\min\!\big(\rho_t\hat A_t,\ \operatorname{clip}(\rho_t,1-\epsilon,1+\epsilon)\hat A_t\big)\right]\\
+&+\tfrac12\,\mathbb{E}_t\!\left[(V_\theta(o_t)-\hat R_t)^2\right]-c_H\,\mathbb{E}_t\!\left[\mathcal H(\pi_\theta(\cdot|o_t))\right],
+\end{aligned}
+\end{equation}
+其中 $\rho_t=\pi_\theta(a_t|o_t)/\pi_{\theta_{\text{old}}}(a_t|o_t)$。超参数见表~\ref{tab:hp}。
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{训练超参数}
+  \label{tab:hp}
+  \begin{tabular}{@{}ll@{\qquad}ll@{}}
+    \toprule
+    参数 & 取值 & 参数 & 取值\\
+    \midrule
+    并行局数 & 64 & 每轮采样步数 & 128 步（64 s）\\
+    训练一局时长 & 30 分钟（3600 步） & 训练轮数 & 500\\
+    折扣 $\gamma$ / GAE $\lambda$ & 0.995 / 0.95 & 剪切 $\epsilon$ & 0.2\\
+    学习率（Adam） & $3\times10^{-4}$ & 每轮更新 & 4 遍，小批量 16384\\
+    熵系数 $c_H$ & 0.01 & 梯度裁剪 & 0.5\\
+    网络 & 2 层 × 256，tanh & 队友共享视野 & 30 m\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{评价指标}
+存活时间报告均值和 2000 次自举的 95\% 置信区间，做法参考 Agarwal 等人对强化学习结果报告方式的建议\cite{agarwal2021}。同一局里各种策略的老鼠面对的是同一批猫，所以策略之间的比较用局内配对差。老鼠行为用五类时间占比描述：静止、在灌木丛里、在夹缝里、贴楼 2 m 以内、冲刺。
+
+围捕指标在每次抓捕的瞬间计算两项：受害者 15 m 内有没有至少 2 只猫；以及包围度 $1-\theta_{\max}/2\pi$，其中 $\theta_{\max}$ 是 20 m 内的猫相对受害者的最大角度空缺，猫全在同一侧时接近 0，四面包围时接近 1。猫之间的分配用两个量描述：抓得最多的猫抓了几只，以及各猫抓捕数的基尼系数。
+
+% =====================================================================
+\section{实验结果与分析}
+% =====================================================================
+\subsection{实验环境与设置}
+环境用 PyTorch 在 GPU 上批量并行实现，所有人的感知、移动、碰撞和抓捕都写成张量运算，在一块 NVIDIA RTX 4070 Laptop GPU（8 GB）上，256 局并行时每步约 44 ms。软件环境为 Python 3.12 与 PyTorch。
+
+实验分三部分。脚本策略实验每种条件跑 256 局、每局 1 小时，同一局里 20 只老鼠按五种策略各 4 只分配，配对比较。“哪里最好躲”实验让每只老鼠开局被分到全图随机的一个藏身点，共 2 × 256 局。共同训练实验中，两种猫奖励各训练 500 轮（每种约 1.5 小时），之后用 128 局、每局 30 分钟做交叉评估。在上真实地图之前，我们先在 50 m × 50 m 的抽象小场地上做了一轮机制探针，结果见第~\ref{sec:res-probe} 节。
+
+\subsection{先导实验：躲之所以赢，是因为动起来更显眼}
+\label{sec:res-probe}
+小场地上我们扫了四个因素：掩体多少、体力是否有限、静止时是否更难被发现、老鼠知不知道谁刚变成猫，每种条件跑 1024 局，一局 300 s。如图~\ref{fig:probe}a，只要“动静一样显眼”，躲就不比跑好，体力无限时在空地上跑反而多活 10 s；一旦静止时更难被发现，躲在每种掩体数量下都赢。体力限制的作用比预想的小。
+
+图~\ref{fig:probe}c 给出了第二个发现：全员都跑时，人均只活 30 s；同样是跑，混在躲的人中间能活 43 s。跑的人被抓得快，猫就变多得快，所有老鼠都更危险。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig1_hide_vs_run.pdf}
+  \caption{\figlead{在 50 m 小场地上，只有“动起来更显眼”时，躲才稳定地比跑活得久。}
+  \textbf{a}，同一局里躲的老鼠减去跑的老鼠的平均存活时间差，按四种“体力 × 显眼度”组合画出。阴影为 95\% 自举区间，每点 1024 局。
+  \textbf{b}，老鼠不知道谁刚变成猫时（虚线），躲的优势缩小。
+  \textbf{c}，体力 20 s、动静一样显眼时，全跑、全躲和混合（各半）三种群体下的人均存活。误差棒为 95\% 自举区间。}
+  \label{fig:probe}
+\end{figure}
+
+我们也在小场地上训练了只有老鼠学习的 PPO（猫是脚本，每种条件 3 个种子，图~\ref{fig:probe-ppo}）。在真实条件下，AI 老鼠活 51–56 s，比脚本躲（50 s）和脚本跑（39 s）都久。它学到的不是“躲到掩体后面”：只有 6\% 的时间贴着掩体，却有 70\% 的时间贴着墙。背靠墙，危险只会从半边来。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig2_ppo_behavior.pdf}
+  \caption{\figlead{小场地上的 AI 老鼠学会了“背靠墙站着不动”，而不是躲到掩体后面。}
+  \textbf{a}，训练曲线，每条线一个随机种子。
+  \textbf{b}，评估时的平均存活时间，评估用训练时没见过的地图布局。脚本策略的误差棒为 95\% 自举区间；PPO 的黑点是各种子的结果，误差棒为 3 个种子的最小值到最大值。
+  \textbf{c}，老鼠时间分配。柱顶两行数字分别是贴掩体、贴墙的时间占比。}
+  \label{fig:probe-ppo}
+\end{figure}
+
+\subsection{真实地图上：夹缝最好，但优势完全来自“更难被发现”}
+\label{sec:res-campus}
+图~\ref{fig:campus}a 是基准条件下五种策略的存活曲线，表~\ref{tab:campus} 给出各条件下的平均存活和以跑为对照的局内配对差。基准条件下，只躲夹缝活得最久，平均 14.8 分钟，比跑多 6.6 分钟（95\% 区间 [5.2, 8.1]）；就近选灌木或夹缝的“躲”其次，12.3 分钟；只躲灌木和原地不动都只比跑多约 0.5 分钟，区间包含 0。所以 H1 只部分成立：夹缝 > 躲 > 跑这个顺序成立，但“灌木 > 原地不动”没有出现。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig3_campus_hide_vs_run.pdf}
+  \caption{\figlead{在真实地图上，躲进夹缝活得最久；但只要藏身处不再更难被发现，躲的优势就消失。}
+  \textbf{a}，基准条件下五种策略的存活曲线（每种策略 1024 只老鼠）。
+  \textbf{b}，五种条件下的平均存活时间：基准；静止不占优（$f_{\text{静}}=1$）；地形不占优（$f_{\text{灌木}}=f_{\text{夹缝}}=1$）；无夜跑路人；20 个路人。颜色同 \textbf{a}，误差棒为 95\% 自举区间，每柱 1024 只老鼠。
+  \textbf{c}，全跑、全躲两种同质群体与混合群体的对比（每组 256 局）。浅色柱是混合群体中该策略老鼠的人均存活。}
+  \label{fig:campus}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{真实地图上各策略的平均存活（分钟）与“该策略 − 跑”的局内配对差。方括号是 95\% 自举区间，每格 256 局 × 4 只老鼠。}
+  \label{tab:campus}
+  \footnotesize\setlength{\tabcolsep}{2.5pt}
+  \begin{tabular}{@{}lccccc@{}}
+    \toprule
+    条件 & 跑 & 原地不动 & 只躲灌木 & 躲（灌木或夹缝） & 只躲夹缝\\
+    \midrule
+    基准 & 8.2 & 8.7（+0.5 [−0.4, 1.4]） & 8.7（+0.5 [−0.2, 1.1]） & 12.3（+4.1 [3.1, 5.1]） & \textbf{14.8}（+6.6 [5.2, 8.1]）\\
+    静止不占优 & 8.0 & 7.9（−0.2 [−1.0, 0.6]） & 8.1（+0.1 [−0.5, 0.7]） & 10.3（+2.3 [1.4, 3.3]） & 10.0（+2.0 [1.0, 2.9]）\\
+    地形不占优 & 7.7 & 6.2（−1.6 [−2.2, −1.0]） & 7.2（−0.5 [−0.9, −0.1]） & 7.5（−0.2 [−0.8, 0.4]） & 7.1（−0.6 [−1.3, 0.1]）\\
+    无夜跑路人 & 8.3 & 9.1（+0.8 [0.0, 1.7]） & 8.5（+0.2 [−0.4, 0.7]） & 11.2（+2.9 [2.0, 3.8]） & 13.4（+5.1 [4.0, 6.2]）\\
+    20 个路人 & 7.9 & 8.7（+0.8 [−0.1, 1.6]） & 8.5（+0.6 [0.0, 1.2]） & 12.3（+4.4 [3.4, 5.5]） & 14.0（+6.1 [4.9, 7.3]）\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+去掉“藏身处更难被发现”这一条，躲的优势完全消失，H2 成立：把灌木和夹缝的系数都改成 1 后，四种躲法没有一种显著好过跑，原地不动反而比跑少活 1.6 分钟；把“静止更难被发现”改成 1 后，躲的优势也减半，夹缝从 +6.6 降到 +2.0 分钟。因此，躲赢在两件事的乘积上：藏身处本身难被看见，加上藏好后不动。只具备其中一项——站在空地上不动，或者在灌木里乱走——都不够。
+
+夜跑路人的影响很小，H3 不成立。路人从 0 增加到 20 个，跑的老鼠只少活 0.4 分钟（8.3 → 7.9），躲的老鼠几乎不变。原因是认错路人的代价不大：老鼠冲刺跑开，路人不会追，体力很快又恢复了。
+
+跑的人还会连累所有人。全跑群体人均只活 6.7 分钟（[6.5, 6.9]）；同样是跑，混在别的策略中间能活 8.2 分钟；全躲群体是 10.8 分钟（图~\ref{fig:campus}c）。这和小场地的结论一致：对单只老鼠来说跑未必最差，但对群体来说，每个跑的人都在加快“猫变多”的速度，这是一种负外部性\cite{hardin1968}。
+
+\subsection{哪里最好躲：藏得住，也要走得到}
+图~\ref{fig:spot}a 把“随机分到某个藏身点的老鼠活了多久”画在地图上。最出乎意料的是图~\ref{fig:spot}b：被随机分到灌木丛和夹缝的老鼠，平均存活几乎一样，都是 11 分钟左右，区间重叠。可是在上一节里，“只躲夹缝”比“只躲灌木”多活 6 分钟。两者的差别在于选点方式：上一节的老鼠是\textbf{就近}选点。
+
+在 A–G 楼一带，夹缝紧贴每栋楼的外墙，离任何地方都不远；大片灌木则多在场地边缘，离集合点 100 m 以上。只躲灌木的老鼠要在空地上走很远才能藏好，路上就被看见了。所以一个藏身点好不好，取决于两件事：藏得住，以及走得到。夹缝两样都占，这和玩家“夹缝里躲了超级超级久”的经验一致（RQ3）。图~\ref{fig:spot}c 中，存活时间随藏身点到集合点的距离变化不大，区间都很宽。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig4_where_to_hide.pdf}
+  \caption{\figlead{一旦藏好，灌木和夹缝一样安全；夹缝赢在离每个人都近。}
+  \textbf{a}，每只老鼠开局被随机分到一个藏身点。圆点是 12 m 格内老鼠的平均存活时间（只画至少 15 只老鼠的格子），点越大样本越多。
+  \textbf{b}，按藏身点类型汇总，误差棒为 95\% 自举区间。
+  \textbf{c}，存活时间随藏身点到集合点距离的变化（40 m 一组，只画至少 100 只老鼠的组），阴影为 95\% 自举区间。共 2 × 256 局、10240 只老鼠。}
+  \label{fig:spot}
+\end{figure}
+
+\subsection{猫鼠共同训练：老鼠学会了用灌木，团队奖励却让猫变弱}
+\label{sec:res-coevo}
+两种猫奖励各训练 500 轮后，我们做交叉评估：让学出来的猫和老鼠分别对上训练时没见过的脚本对手。只有对手固定，才能比较“谁学得更好”（图~\ref{fig:coevo}）。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{fig5_coevolution.pdf}
+  \caption{\figlead{共同训练出的老鼠学会了待在灌木丛里，但只适应了和它一起训练的猫；团队奖励没有让猫更会围捕，反而让多数猫“搭便车”。}
+  \textbf{a}，训练中老鼠的平均存活时间（每点为一批完整对局的平均）。
+  \textbf{b}，三种猫（脚本猫、个人奖励的 AI 猫、团队奖励的 AI 猫）对上同一批脚本老鼠（跑、躲各半）时，老鼠的平均存活；存活越短，说明猫越强。
+  \textbf{c}，三种老鼠对上脚本猫时的平均存活。
+  \textbf{d}，老鼠和与它一起训练的猫对局时，各类行为的时间占比（脚本老鼠一栏为脚本对脚本）。
+  \textbf{e}，对上脚本老鼠时，抓捕瞬间受害者 15 m 内有 ≥2 只猫的比例（深色）和包围度（浅色）。
+  \textbf{f}，各猫抓捕数的基尼系数；柱顶数字是抓得最多的那只猫平均抓了几只。
+  \textbf{b}–\textbf{f} 每组 128 局、每局 30 分钟；误差棒为 95\% 自举区间。}
+  \label{fig:coevo}
+\end{figure}
+
+先看老鼠（RQ2）。学出来的老鼠有 41–48\% 的时间待在灌木丛里，脚本老鼠只有 26\%（图~\ref{fig:coevo}d）。没有任何规则告诉它灌木丛有用，这是从“多活一会儿”的奖励里自己学到的。但它很少静止（5–9\%），几乎不进夹缝（2–4\%），“去最近藏身点”这个现成动作也只用了约 4\%。它学到的是“在灌木里慢慢挪”，按发现模型，这和“在空地上站着不动”差不多显眼（5 m 处 1 秒内被发现的概率是 55\% 对 63\%），远不如在灌木里不动（18\%）。
+
+这种策略只对它的训练对手有效。和一起训练的猫对局时，AI 老鼠能活 12.9 分钟（个人组）和 17.1 分钟（团队组）；换成脚本猫以后，只剩 6.8 分钟和 3.4 分钟，反而不如脚本老鼠的 8.4 分钟（图~\ref{fig:coevo}c）。脚本猫会预判拦截，还会按“多久没搜过”系统地巡逻，正好克制“在灌木里走动”。这是共同训练中典型的相互过拟合：双方只学会了打败对方当前的策略。夹缝没有被学到，可能有两个原因：一是夹缝总面积只有 391 m²，是灌木丛的 1/40，在 7 × 7 的局部图里很少出现；二是“躲进去不动”要很久以后才见效，需要跨越很长时间的信用分配。
+
+再看猫（RQ4）。团队奖励没有带来更多围捕，反而让猫变弱，H4 不成立。对上同一批脚本老鼠时（图~\ref{fig:coevo}b、e），个人奖励的猫让老鼠活 12.6 分钟，团队奖励的猫让老鼠活 26.6 分钟（满分 30 分钟），两者都不如脚本猫的 8.4 分钟；包围度三组几乎相同（脚本猫 0.18，个人奖励猫 0.17，团队奖励猫 0.16）；抓捕时身边有 ≥2 只猫的比例，团队奖励反而最低（0.50，个人奖励 0.66，脚本猫 0.74）。团队组只有在和一起训练的老鼠对局时，包围度才更高（0.26 对 0.17），但那批老鼠本身就不同，这个差别不能算作学会了围捕。
+
+团队奖励下，猫之间的分配反而最不平均：基尼系数 0.80，抓得最多的猫也只抓了 1.4 只（图~\ref{fig:coevo}f）。我们的解释是信用分配问题：全队平分时，一只猫的奖励几乎与它自己做了什么无关，有效的学习信号被稀释到原来的 1/10 以下，多数猫学成了“懒惰的队友”，只有少数猫还在追。这与 VDN 等工作中报告的“懒惰智能体”现象一致\cite{sunehag2018}。也就是说，真实游戏里“抓得最多的猫有奖”这个个人奖励，在学习意义上反而更有效：它给了每只猫一个清晰的信号。
+
+% =====================================================================
+\section{总结与思考}
+% =====================================================================
+\subsection{主要结论}
+本文在上大 A–G 楼的真实地图上复现了“躲比跑活得久”：躲进夹缝比跑多活 6.6 分钟。但这一优势完全来自“藏身处更难被发现”，把这一条去掉，躲就不再有优势；小场地上也是同样的结论，动静一样显眼时，跑甚至更好。好的藏身点要“藏得住、走得到”：一旦藏好，灌木和夹缝一样安全，夹缝赢在紧贴每栋楼，走过去不用穿过大片空地，这解释了为什么实战里躲在夹缝的人活得最久。被抓即转化还让“跑”带上了负外部性：全员都跑时，人均存活比混合群体再少 1.5 分钟。
+
+共同训练能学到一部分人类经验：AI 老鼠自己学会了用灌木丛，但没有学会蹲夹缝，而且换一个对手就失效。团队奖励也不等于团队合作：平分奖励没有让猫更会围捕，反而让多数猫“搭便车”。
+
+\subsection{博弈论视角的思考}
+这个游戏里有两层博弈。猫和老鼠之间，一开始是搜索博弈，一旦被发现就变成追逃博弈：“躲”把博弈留在搜索阶段，“跑”则过早进入追逃阶段，而在体力有限、猫越来越多的条件下，追逃阶段对老鼠越来越不利。老鼠和老鼠之间则是一个社会困境：每只老鼠被抓都会给其他人增加一个敌人，所以“跑”是一种把风险转嫁给集体的策略。全员都躲是最好的集体结果，但单只老鼠在被看见时很难不跑。
+
+猫的奖励设计体现了机制设计的意义。从博弈的角度看，团队奖励似乎更鼓励合作；但在学习意义上，奖励必须能追溯到个体的行为才有用。现实中“抓得最多的猫有奖”恰好给了每只猫清晰的激励。
+
+\subsection{方法上的迭代与局限}
+小场地阶段，AI 老鼠先后找到了两个环境漏洞：一是猫的巡逻点到不了墙角，老鼠就躲在角落里不动；二是猫只会直线追，老鼠绕着跑就能甩掉。给猫加上搜索记忆和预判拦截之后，结论才稳定下来。这说明对手太弱时，学到的“策略”可能只是漏洞。
+
+本文还有几处局限。发现概率的几个系数来自游戏体验，不是测量值；我们用“把系数改成 1”的敏感性分析说明了结论依赖哪一项，但具体的存活分钟数不能当真。地图的一部分是合成的：灌木丛来自 OSM 的林地和行道树，空调外机是按规律放置的，并非实地位置。训练规模也有限：每种奖励只训练了 1 个种子、500 轮，AI 猫还不如脚本猫，说明猫的策略远没有收敛；围捕指标也受“场上有多少只猫”的影响，后续应在相同猫数下比较。
+
+下一步可以从三方面改进：用基于个体贡献的信用分配（例如差分奖励或值分解），检验团队奖励能否在不产生“懒惰队友”的情况下带来围捕；让双方和历史版本的对手对局（虚拟自我对弈），缓解相互过拟合；回到实地标出真实的灌木与空调外机位置，再跑一次“哪里最好躲”。
+
+% =====================================================================
+\renewcommand{\refname}{\normalsize\normalfont 参考文献：}
+\begin{thebibliography}{99}
+\small
+\setlength{\itemsep}{0pt}
+\bibitem{isaacs1965} Isaacs R. Differential games[M]. New York: Wiley, 1965.
+\bibitem{alpern2003} Alpern S, Gal S. The theory of search games and rendezvous[M]. Boston: Kluwer Academic Publishers, 2003.
+\bibitem{chung2011} Chung T H, Hollinger G A, Isler V. Search and pursuit-evasion in mobile robotics: a survey[J]. Autonomous Robots, 2011, 31(4): 299-316.
+\bibitem{schulman2017ppo} Schulman J, Wolski F, Dhariwal P, et al. Proximal policy optimization algorithms[J]. arXiv preprint arXiv:1707.06347, 2017.
+\bibitem{schulman2016gae} Schulman J, Moritz P, Levine S, et al. High-dimensional continuous control using generalized advantage estimation[C]//International Conference on Learning Representations. 2016.
+\bibitem{yu2022mappo} Yu C, Velu A, Vinitsky E, et al. The surprising effectiveness of PPO in cooperative multi-agent games[C]//Advances in Neural Information Processing Systems. 2022, 35: 24611-24624.
+\bibitem{baker2020} Baker B, Kanitscheider I, Markov T, et al. Emergent tool use from multi-agent autocurricula[C]//International Conference on Learning Representations. 2020.
+\bibitem{lowe2017} Lowe R, Wu Y, Tamar A, et al. Multi-agent actor-critic for mixed cooperative-competitive environments[C]//Advances in Neural Information Processing Systems. 2017, 30: 6379-6390.
+\bibitem{leibo2017} Leibo J Z, Zambaldi V, Lanctot M, et al. Multi-agent reinforcement learning in sequential social dilemmas[C]//Proceedings of the 16th Conference on Autonomous Agents and MultiAgent Systems. 2017: 464-473.
+\bibitem{grupen2022} Grupen N, Selman B, Lee D D. Cooperative multi-agent fairness and equivariant policies[C]//Proceedings of the AAAI Conference on Artificial Intelligence. 2022, 36(9): 9350-9359.
+\bibitem{kermack1927} Kermack W O, McKendrick A G. A contribution to the mathematical theory of epidemics[J]. Proceedings of the Royal Society of London. Series A, 1927, 115(772): 700-721.
+\bibitem{hardin1968} Hardin G. The tragedy of the commons[J]. Science, 1968, 162(3859): 1243-1248.
+\bibitem{osm} OpenStreetMap contributors. OpenStreetMap[EB/OL]. [2026-11-05]. \url{https://www.openstreetmap.org}.
+\bibitem{sunehag2018} Sunehag P, Lever G, Gruslys A, et al. Value-decomposition networks for cooperative multi-agent learning based on team reward[C]//Proceedings of the 17th International Conference on Autonomous Agents and MultiAgent Systems. 2018: 2085-2087.
+\bibitem{agarwal2021} Agarwal R, Schwarzer M, Castro P S, et al. Deep reinforcement learning at the edge of the statistical precipice[C]//Advances in Neural Information Processing Systems. 2021, 34: 29304-29320.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,97 @@
+{
+  "pdf": "figures\\fig4_where_to_hide.pdf",
+  "auditable": true,
+  "verdict": "REVIEW REQUIRED",
+  "page_count": 1,
+  "visible_text_box_count": 33,
+  "text_trace_count": 37,
+  "stroke_path_count": 70,
+  "filled_region_count": 318,
+  "image_region_count": 2,
+  "summary": {
+    "fail": 0,
+    "warn": 3,
+    "contained_fill_overlays": 6,
+    "contained_image_overlays": 0
+  },
+  "thresholds": {
+    "text_inset_pt": 0.6,
+    "min_overlap_ratio": 0.05,
+    "clipping_tolerance_pt": 0.5
+  },
+  "findings": [
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 2 filled region(s)",
+      "text": "集合点",
+      "text_bbox": [
+        104.78756713867188,
+        164.11981201171875,
+        125.78756713867188,
+        171.11981201171875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        124.39842224121094,
+        159.74691772460938,
+        131.76527404785156,
+        172.60800170898438
+      ],
+      "object_count": 2,
+      "object_indexes": [
+        132,
+        241
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "灌木丛",
+      "text_bbox": [
+        303.7537841796875,
+        265.7680969238281,
+        324.7537841796875,
+        272.7680969238281
+      ],
+      "other_text": null,
+      "other_bbox": [
+        302.0711975097656,
+        173.88323974609375,
+        423.15826416015625,
+        269.83135986328125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        298
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "夹缝",
+      "text_bbox": [
+        358.3537902832031,
+        265.7680969238281,
+        372.3537902832031,
+        272.7680969238281
+      ],
+      "other_text": null,
+      "other_bbox": [
+        302.0711975097656,
+        173.88323974609375,
+        423.15826416015625,
+        269.83135986328125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        298
+      ]
+    }
+  ]
+}

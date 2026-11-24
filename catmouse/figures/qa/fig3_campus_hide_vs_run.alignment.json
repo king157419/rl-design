@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "python-matplotlib",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 1,
+    "exemptions": 1
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "python-matplotlib",
+    "figure": {
+      "width_pt": 413.85826771653547,
+      "height_pt": 198.4251968503937
+    },
+    "panels": [
+      {
+        "id": "a",
+        "bbox_pt": [
+          31.03937007874016,
+          39.68503937007875,
+          116.45598247587473,
+          184.53543307086613
+        ],
+        "grid_id": "matplotlib-grid-1",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 0,
+        "col_stop": 1,
+        "panel_label": "a",
+        "panel_label_anchor_pt": [
+          17.37271209519863,
+          191.77795275590552
+        ]
+      },
+      {
+        "id": "b",
+        "bbox_pt": [
+          156.3170682612042,
+          39.68503937007875,
+          305.7961399561897,
+          184.53543307086613
+        ],
+        "grid_id": "matplotlib-grid-1",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 1,
+        "col_stop": 2,
+        "panel_label": "b",
+        "panel_label_anchor_pt": [
+          132.40041679000655,
+          191.77795275590552
+        ]
+      },
+      {
+        "id": "c",
+        "bbox_pt": [
+          345.6572257415192,
+          39.68503937007875,
+          409.7196850393701,
+          184.53543307086613
+        ],
+        "grid_id": "matplotlib-grid-1",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 2,
+        "col_stop": 3,
+        "panel_label": "c",
+        "panel_label_anchor_pt": [
+          335.40723225386307,
+          191.77795275590552
+        ]
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "inferred-row-1",
+        "panels": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
+    ],
+    "column_groups": [],
+    "boundary_groups": [],
+    "exemptions": [
+      {
+        "panels": [
+          "b",
+          "c"
+        ],
+        "checks": [
+          "panel-width"
+        ],
+        "reason": "b 有 5 组条件，故意加宽；c 只有 4 根柱"
+      }
+    ]
+  },
+  "findings": []
+}

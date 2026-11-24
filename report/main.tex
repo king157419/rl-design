@@ -1,0 +1,162 @@
+% 《博弈论与强化学习》算法实战报告 —— 按课程模板（课程设计报告模板（算法实战）.docx）排版
+% 编译：XeLaTeX（Overleaf：Menu → Compiler 选 XeLaTeX）
+\documentclass[a4paper,zihao=5,fontset=fandol,UTF8]{ctexart}
+
+% ---------- 版面：与模板一致 ----------
+% A4；左右 3.175 cm，上下 2.54 cm；页眉一条横线
+\usepackage[a4paper,left=3.175cm,right=3.175cm,top=2.54cm,bottom=2.54cm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+% 模板西文是 Times New Roman，这里用同款字形的 TeX Gyre Termes（TeX Live 自带）
+\setmainfont{texgyretermes}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
+\setsansfont{texgyreheros}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\cfoot{\small\thepage}
+\fancypagestyle{cover}{\fancyhf{}\renewcommand{\headrulewidth}{0.6pt}}
+
+% 正文：宋体五号，1.2 倍行距（Word 的 1.2 倍约等于此处 1.25），段前段后 2.5 pt，首行缩进 2 字
+\linespread{1.25}
+\setlength{\parskip}{2.5pt}
+
+% 标题：一级 15 pt「1.」，二级 14 pt「2.1.」，三级 12 pt「2.1.1.」，均加粗
+\ctexset{
+  section = {format=\fontsize{15pt}{19.5pt}\selectfont\bfseries\heiti\raggedright, name={,.}, number=\arabic{section},
+             aftername=\enspace, beforeskip=12pt, afterskip=6pt},
+  subsection = {format=\fontsize{14pt}{18.2pt}\selectfont\bfseries\heiti\raggedright, name={,.}, aftername=\enspace,
+                beforeskip=8pt, afterskip=4pt, indent=1.5em},
+  subsubsection = {format=\fontsize{12pt}{15.6pt}\selectfont\bfseries\heiti\raggedright, name={,.}, aftername=\enspace,
+                   beforeskip=6pt, afterskip=3pt, indent=3em},
+  figurename = 图, tablename = 表,
+}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs,multirow,array,tabularx}
+\usepackage{amsmath,amssymb,bm}
+\usepackage[font=small,labelsep=quad,justification=justified,singlelinecheck=true]{caption}
+% 表题放在表的上方、居中；图题放在图的下方，一行放得下时居中，多行时两端对齐
+\captionsetup[table]{justification=centering,position=top}
+\usepackage{enumitem}
+% 少量保留的列表：编号与正文首行缩进对齐
+\setlist{nosep}
+\setlist[enumerate]{label=（\arabic*）,leftmargin=*,labelindent=2em,labelsep=0.2em}
+\setlist[itemize]{leftmargin=*,labelindent=2em,labelsep=0.5em}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+% 浮动体：多放图、少留白；只放图的页面从顶部排起，不居中
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{4}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{18pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+
+% 图注的第一句话是结论（Nature 图注写法）
+\newcommand{\figlead}[1]{\textbf{#1}}
+
+\begin{document}
+
+% =====================================================================
+% 封面（照模板）
+% =====================================================================
+\thispagestyle{cover}
+\begin{center}
+\vspace*{0.6cm}
+{\fontsize{16pt}{24pt}\selectfont\bfseries\heiti 上海大学\ 2026\ \textasciitilde\ 2027\ 学年\ 秋季学期}\\[14pt]
+{\fontsize{18pt}{27pt}\selectfont\bfseries\heiti \underline{《博弈论与强化学习》}\quad 算法实战报告}
+\end{center}
+\vspace{3.2cm}
+{\fontsize{14pt}{30pt}\selectfont\heiti
+\hspace*{2.6cm}\begin{tabular}{@{}l@{\,}l@{}}
+课程设计题目: & \underline{\makebox[7.4cm][l]{\songti 上大校园猫捉老鼠：躲还是跑？}}\\[6pt]
+姓名: & \underline{\makebox[5.6cm][l]{\songti 刘明洋}}\\[6pt]
+学号: & \underline{\makebox[5.6cm][l]{\songti 24121874}}\\[6pt]
+贡献度（百分比）: & \underline{\makebox[2.6cm][l]{\songti 100\%}}\\
+\end{tabular}}
+
+\vspace{0.9cm}
+{\fontsize{12pt}{16pt}\selectfont\heiti 评分细则:}\par\vspace{4pt}
+\noindent\hspace*{-0.45cm}{\fontsize{12pt}{16pt}\selectfont
+\renewcommand{\arraystretch}{1.6}\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.6cm}|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.1cm}|>{\centering\arraybackslash}m{2.1cm}|}
+\hline
+{\heiti 格式规范}\newline（10\%） & {\heiti 选题创新性}\newline（20\%） & {\heiti 算法实现}\newline（30\%） & {\heiti 实验分析}\newline（20\%） & {\heiti 总结思考}\newline（20\%） & {\heiti 总成绩}\newline（100\%）\\
+\hline
+ & & & & & \\[16pt]
+\hline
+\end{tabular}}
+
+\vspace{6pt}
+{\fontsize{12pt}{16pt}\selectfont\heiti 课程报告评语:}
+
+\vfill
+{\fontsize{12pt}{16pt}\selectfont\heiti 任课教师: \underline{\makebox[3cm]{}}\hfill 评阅日期: \underline{\makebox[2.6cm]{}}}
+\vspace{1.5cm}
+\newpage
+
+% =====================================================================
+% 题目、摘要、关键词
+% =====================================================================
+\begin{center}
+{\fontsize{22pt}{30pt}\selectfont\bfseries\heiti 上大校园猫捉老鼠：躲还是跑？}\\[6pt]
+{\fontsize{12pt}{16pt}\selectfont\heiti 真实地图上的多智能体追逃博弈与双方共同强化学习}
+\end{center}
+\vspace{4pt}
+
+\noindent{\heiti\bfseries 摘要：}%
+本文以上海大学宝山校区一次 30 人猫捉老鼠为背景，用 OpenStreetMap 地图把游戏建模为“被抓即转化”的部分可观测随机博弈，结合脚本策略、模仿模型和猫鼠共同强化学习进行分析。结果表明：躲比跑多活约 5.8 分钟，优势主要来自藏身处的隐蔽性；只参照一个同伴时，躲的比例上升很慢；AI 老鼠学到的是针对训练对手的对策；团队平分奖励使猫变弱，奖励要落到在场的猫身上才有效。
+
+\vspace{4pt}
+\noindent{\heiti\bfseries 关键词：}追逃博弈；演化博弈；多智能体强化学习；部分可观测随机博弈；奖励结构
+
+\vspace{8pt}
+
+\input{parts/front}
+\input{parts/method}
+
+% =====================================================================
+\section{实验结果与分析}
+% =====================================================================
+\input{parts/results_setup_pilot}
+\input{parts/results_rq1}
+\input{parts/results_spot_rounds}
+\input{parts/results_coevo}
+
+\input{parts/conclusion}
+
+% =====================================================================
+\renewcommand{\refname}{\normalsize\normalfont 参考文献：}
+\begin{thebibliography}{99}
+\small
+\setlength{\itemsep}{0pt}
+\bibitem{alpern2003} Alpern S, Gal S. The theory of search games and rendezvous[M]. Boston: Kluwer Academic Publishers, 2003.
+\bibitem{chung2011} Chung T H, Hollinger G A, Isler V. Search and pursuit-evasion in mobile robotics: a survey[J]. Autonomous Robots, 2011, 31(4): 299-316.
+\bibitem{baker2020} Baker B, Kanitscheider I, Markov T, et al. Emergent tool use from multi-agent autocurricula[C]//International Conference on Learning Representations. 2020.
+\bibitem{schulman2017ppo} Schulman J, Wolski F, Dhariwal P, et al. Proximal policy optimization algorithms[EB/OL]. arXiv preprint arXiv:1707.06347, 2017. \url{https://arxiv.org/abs/1707.06347}.
+\bibitem{schulman2016gae} Schulman J, Moritz P, Levine S, et al. High-dimensional continuous control using generalized advantage estimation[C]//International Conference on Learning Representations. 2016.
+\bibitem{yu2022mappo} Yu C, Velu A, Vinitsky E, et al. The surprising effectiveness of PPO in cooperative multi-agent games[C]//Advances in Neural Information Processing Systems. 2022, 35: 24611-24624.
+\bibitem{grupen2022} Grupen N, Selman B, Lee D D. Cooperative multi-agent fairness and equivariant policies[C]//Proceedings of the AAAI Conference on Artificial Intelligence. 2022, 36(9): 9350-9359.
+\bibitem{leibo2017} Leibo J Z, Zambaldi V, Lanctot M, et al. Multi-agent reinforcement learning in sequential social dilemmas[C]//Proceedings of the 16th Conference on Autonomous Agents and MultiAgent Systems. 2017: 464-473.
+\bibitem{taylor1978} Taylor P D, Jonker L B. Evolutionary stable strategies and game dynamics[J]. Mathematical Biosciences, 1978, 40(1-2): 145-156.
+\bibitem{szabo1998} Szabó G, Tőke C. Evolutionary prisoner's dilemma game on a square lattice[J]. Physical Review E, 1998, 58(1): 69-73.
+\bibitem{traulsen2006} Traulsen A, Nowak M A, Pacheco J M. Stochastic dynamics of invasion and fixation[J]. Physical Review E, 2006, 74(1): 011909.
+\bibitem{kermack1927} Kermack W O, McKendrick A G. A contribution to the mathematical theory of epidemics[J]. Proceedings of the Royal Society of London. Series A, 1927, 115(772): 700-721.
+\bibitem{osm} OpenStreetMap contributors. OpenStreetMap[EB/OL]. [2026-11-05]. \url{https://www.openstreetmap.org}.
+\bibitem{sunehag2018} Sunehag P, Lever G, Gruslys A, et al. Value-decomposition networks for cooperative multi-agent learning based on team reward[C]//Proceedings of the 17th International Conference on Autonomous Agents and MultiAgent Systems. 2018: 2085-2087.
+\bibitem{agarwal2021} Agarwal R, Schwarzer M, Castro P S, et al. Deep reinforcement learning at the edge of the statistical precipice[C]//Advances in Neural Information Processing Systems. 2021, 34: 29304-29320.
+\end{thebibliography}
+
+\end{document}

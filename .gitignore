@@ -1,0 +1,31 @@
+# 只上传强化学习课设本身；网络排查、代理配置等记录一律不传
+/*
+!/.gitignore
+!/catmouse/
+!/redpacket/
+!/report/
+!/figures/
+!/选题梳理.md
+!/选题独立构思种子_2026-10-30.md
+!/选题调研与对比表_2026-10-30.md
+!/选题对比表_2026-10-30.csv
+!/两个视频的博弈模型与课设分析_2026-11-02.md
+!/Generals仓库点评与课设比较_2026-11-03.md
+!/博弈论与强化学习_零基础速通与选题.txt
+
+# 课设里的大文件与中间产物
+private/
+*.pt
+*.npz
+*.bak*
+__pycache__/
+.venv/
+*.log
+.env
+.env.*
+*.pem
+*.key
+*.exe
+.omx/
+.omc/
+_carbon_ziptest/

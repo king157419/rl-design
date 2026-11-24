@@ -1,0 +1,9 @@
+script_vs_script: 存活 8.4 [8.0,8.8] min | 抓捕 2467 次 | ≥2猫 0.74 [0.73,0.76] | 包围度 0.18 [0.18,0.19] | 最佳猫 3.2 基尼 0.66 | still=0.37 bush=0.26 gap=0.26 sprint=0.10 near_bld=0.38
+indiv/learned_cat_vs_learned_mouse: 存活 12.9 [12.0,13.8] min | 抓捕 1898 次 | ≥2猫 0.66 [0.64,0.68] | 包围度 0.17 [0.16,0.18] | 最佳猫 2.8 基尼 0.72 | still=0.09 bush=0.48 gap=0.04 sprint=0.11 near_bld=0.15
+indiv/learned_cat_vs_mixed_mouse: 存活 12.6 [11.9,13.3] min | 抓捕 1925 次 | ≥2猫 0.66 [0.64,0.68] | 包围度 0.17 [0.16,0.18] | 最佳猫 2.8 基尼 0.72 | still=0.53 bush=0.23 gap=0.27 sprint=0.06 near_bld=0.45
+indiv/script_cat_vs_learned_mouse: 存活 6.8 [6.5,7.2] min | 抓捕 2553 次 | ≥2猫 0.68 [0.66,0.69] | 包围度 0.16 [0.15,0.17] | 最佳猫 3.2 基尼 0.65 | still=0.09 bush=0.41 gap=0.05 sprint=0.16 near_bld=0.17
+team/learned_cat_vs_learned_mouse: 存活 17.1 [16.4,17.9] min | 抓捕 1417 次 | ≥2猫 0.73 [0.70,0.75] | 包围度 0.26 [0.24,0.27] | 最佳猫 3.0 基尼 0.81 | still=0.05 bush=0.41 gap=0.02 sprint=0.12 near_bld=0.13
+team/learned_cat_vs_mixed_mouse: 存活 26.6 [26.2,27.1] min | 抓捕 379 次 | ≥2猫 0.50 [0.45,0.55] | 包围度 0.16 [0.14,0.18] | 最佳猫 1.4 基尼 0.80 | still=0.58 bush=0.21 gap=0.33 sprint=0.04 near_bld=0.50
+team/script_cat_vs_learned_mouse: 存活 3.4 [3.2,3.7] min | 抓捕 2558 次 | ≥2猫 0.85 [0.84,0.86] | 包围度 0.22 [0.21,0.23] | 最佳猫 3.0 基尼 0.62 | still=0.04 bush=0.41 gap=0.02 sprint=0.18 near_bld=0.08
+indiv 最后 5 段训练存活 14.338418172200521 min; 最后 50 轮 chase 0.10356834429937105 dir 0.7070930457363526 m_hide 0.04458202495394895 m_still 0.04090918270715823
+team 最后 5 段训练存活 25.161730143229168 min; 最后 50 轮 chase 0.017945849055346724 dir 0.76837058365345 m_hide 0.04326887401596954 m_still 0.05264262932663163

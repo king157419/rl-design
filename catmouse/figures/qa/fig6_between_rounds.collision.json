@@ -1,0 +1,72 @@
+{
+  "pdf": "figures\\fig6_between_rounds.pdf",
+  "auditable": true,
+  "verdict": "REVIEW REQUIRED",
+  "page_count": 1,
+  "visible_text_box_count": 35,
+  "text_trace_count": 41,
+  "stroke_path_count": 41,
+  "filled_region_count": 48,
+  "image_region_count": 0,
+  "summary": {
+    "fail": 0,
+    "warn": 2,
+    "contained_fill_overlays": 2,
+    "contained_image_overlays": 0
+  },
+  "thresholds": {
+    "text_inset_pt": 0.6,
+    "min_overlap_ratio": 0.05,
+    "clipping_tolerance_pt": 0.5
+  },
+  "findings": [
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "全体平均",
+      "text_bbox": [
+        99.73176574707031,
+        60.027122497558594,
+        127.73176574707031,
+        67.0271224975586
+      ],
+      "other_text": null,
+      "other_bbox": [
+        78.16334533691406,
+        40.08514404296875,
+        184.86859130859375,
+        61.19031524658203
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "躲者",
+      "text_bbox": [
+        106.73176574707031,
+        34.42491912841797,
+        120.73176574707031,
+        41.42491912841797
+      ],
+      "other_text": null,
+      "other_bbox": [
+        78.16334533691406,
+        40.08514404296875,
+        184.86859130859375,
+        61.19031524658203
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    }
+  ]
+}
